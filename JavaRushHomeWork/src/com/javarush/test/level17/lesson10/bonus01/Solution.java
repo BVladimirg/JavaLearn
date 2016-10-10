@@ -1,8 +1,8 @@
 package com.javarush.test.level17.lesson10.bonus01;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /* CRUD
 CrUD - Create, Update, Delete
@@ -34,7 +34,45 @@ public class Solution {
         allPeople.add(Person.createMale("Петров Петр", new Date()));  //сегодня родился    id=1
     }
 
-    public static void main(String[] args) {
-        //start here - начни тут
+    public static void main(String[] args) throws ParseException
+    {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+
+            //Argument processing (-c)
+            if (args[0].equals("-c")) {
+                Person person;
+                if (args[2].equals("м")) {
+                    person = Person.createMale(args[1], dateFormat.parse(args[3]));
+                } else {
+                    person = Person.createFemale(args[1], dateFormat.parse(args[3]));
+                }
+                allPeople.add(person);
+                System.out.println(allPeople.indexOf(person));
+
+                //Argument processing (-u)
+            } else if (args[0].equals("-u")) {
+                allPeople.get(Integer.parseInt(args[1])).setName(args[2]);
+                if (args[3].equals("м"))
+                    allPeople.get(Integer.parseInt(args[1])).setSex(Sex.MALE);
+                else if (args[3].equals("ж"))
+                    allPeople.get(Integer.parseInt(args[1])).setSex(Sex.FEMALE);
+                allPeople.get(Integer.parseInt(args[1])).setBirthDay(dateFormat.parse(args[4]));
+
+                //Argument processing (-d)
+            } else if (args[0].equals("-d")) {
+                allPeople.get(Integer.parseInt(args[1])).setBirthDay(null);
+
+                //Argument processing (-i)
+            } else if (args[0].equals("-i")) {
+                dateFormat = new SimpleDateFormat("dd-MMM-YYYY", Locale.ENGLISH);
+                System.out.println(allPeople.get(Integer.parseInt(args[1])).getName() + " " +
+                        (allPeople.get(Integer.parseInt(args[1])).getSex().equals(Sex.MALE) ? "м" : "ж") + " " +
+                        dateFormat.format(allPeople.get(Integer.parseInt(args[1])).getBirthDay()));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
+
 }

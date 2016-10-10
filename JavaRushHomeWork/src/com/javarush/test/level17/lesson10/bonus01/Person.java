@@ -2,7 +2,7 @@ package com.javarush.test.level17.lesson10.bonus01;
 
 import java.util.Date;
 
-public class Person {
+ class Person {
     private String name;
     private Sex sex;
     private Date birthDay;
@@ -13,7 +13,7 @@ public class Person {
         this.birthDay = birthDay;
     }
 
-    public static Person createMale(String name, Date birthDay){
+    static Person createMale(String name, Date birthDay){
         return new Person(name, Sex.MALE, birthDay);
     }
 
