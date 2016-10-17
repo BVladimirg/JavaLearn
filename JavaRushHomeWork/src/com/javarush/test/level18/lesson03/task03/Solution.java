@@ -16,22 +16,18 @@ public class Solution {
         FileInputStream inputStream = new FileInputStream(fileName);
         //return HashMap with all file's bytes and counts of that bytes
         HashMap<Integer, Integer> byteCount = new HashMap<Integer, Integer>();
+
+        int maxCount = 0;
         while (inputStream.available() > 0) {
             int byteKey = inputStream.read();
             int count = 1;
             if (byteCount.containsKey(byteKey)) {
                 count = byteCount.get(byteKey) + 1;
+                if (count > maxCount) maxCount = count;
             }
             byteCount.put(byteKey, count);
         }
         inputStream.close();
-
-        //finds max count of bytes
-        int maxCount = 0;
-        for (Map.Entry<Integer, Integer> entry : byteCount.entrySet()) {
-            int currentCount = entry.getValue();
-            if (maxCount < currentCount) maxCount = currentCount;
-        }
 
         //finds all bytes with value "maxCount"
         ArrayList<Integer> resultArr = new ArrayList<>();
