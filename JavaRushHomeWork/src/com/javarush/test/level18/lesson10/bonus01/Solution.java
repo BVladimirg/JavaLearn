@@ -13,9 +13,57 @@ fileOutputName - имя файла, куда необходимо записат
 -d - ключ указывает, что необходимо расшифровать данные
 */
 
-public class Solution {
-    public static void main(String[] args) {
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+public class Solution {
+    public static void main(String[] args) throws IOException
+    {
+        if (args.length > 0) {
+
+            FileInputStream fIn = new FileInputStream(args[1]);
+            FileOutputStream fOut = new FileOutputStream(args[2]);
+
+            if (args[0].equals("-e")) {
+                if (fIn.available() > 0) {
+                    byte[] fInbyte = new byte[fIn.available()];
+                    byte[] key = "encrypt".getBytes();
+
+                    int count = fIn.read(fInbyte);
+
+                    //XOR encrypting
+                    for (int i = 0; i < fInbyte.length; i++)
+                    {
+                        fInbyte[i] ^= key[i % key.length];
+                    }
+
+                    fOut.write(fInbyte);
+
+                    fIn.close();
+                    fOut.close();
+                }
+
+
+            } else if (args[0].equals("-d")) {
+                if (fIn.available() > 0) {
+                    byte[] fInbyte = new byte[fIn.available()];
+                    int count = fIn.read(fInbyte);
+
+                    byte[] key = "encrypt".getBytes();
+                    //XOR decrypting
+                    for (int i = 0; i < fInbyte.length; i++)
+                    {
+                        fInbyte[i] ^= key[i % key.length];
+                    }
+
+                    fOut.write(fInbyte, 0, count);
+
+                    fIn.close();
+                    fOut.close();
+                }
+            }
+        }
     }
 
 }
