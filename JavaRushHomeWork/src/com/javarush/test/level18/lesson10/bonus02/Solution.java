@@ -22,7 +22,53 @@ id productName price quantity
 19847983Куртка для сноубордистов, разм10173.991234
 */
 
+import java.io.*;
+
 public class Solution {
     public static void main(String[] args) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String fileName = reader.readLine();
+        reader.close();
+
+        FileOutputStream out = new FileOutputStream(fileName, true);
+        if (args.length > 0) {
+            if (args[0].equals("-c")) {
+                String outLine =
+                        setStringLength(String.valueOf(getMaxId(fileName) + 1), 8)
+                        + setStringLength(args[1], 30)
+                        + setStringLength(args[2], 8)
+                        + setStringLength(args[3], 4)
+                        + "\n";
+                byte[] outBytes = outLine.getBytes();
+                out.write(outBytes);
+            }
+        }
+        out.close();
+    }
+
+    public static int getMaxId(String fileName) throws IOException
+    {
+        BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
+        String line;
+        int maxId = 0;
+        while ((line = fileReader.readLine()) != null) {
+            int id = Integer.parseInt(line.split(" ")[0]);
+            if (maxId < id) {
+                maxId = id;
+            }
+        }
+        fileReader.close();
+        return maxId;
+    }
+
+    public static String setStringLength(String line, int outLineLength) {
+        if (line.length() > outLineLength) {
+            line = line.substring(0, outLineLength);
+        } else
+            for (int i = 0; i < outLineLength - line.length(); i++)
+            {
+                line += " ";
+            }
+        return line;
     }
 }
